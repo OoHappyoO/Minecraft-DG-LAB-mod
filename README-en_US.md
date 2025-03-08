@@ -1,32 +1,30 @@
 # Minecraft-DG-LAB-mod
 
-> 又一个 Minecraft DG-LAB mod
+> Another DG-LAB support mod
 
-[[README English ver.]](README-en_US.md)
-
-## 功能
+## Feature
 
 TODO
 
-## 如何使用
+## How to use
 
-- 此 mod 适用于 Minecraft 1.21.4 Fabric.
-- 这是客户端 mod.
-- mod 依赖:
+- This mod is suitable for Minecraft 1.21.4 Fabric.
+- It is client side.
+- Dependent on:
   - Fabric Language Kotlin
   - Mod Menu
   - Cloth Config
 
-添加 mod 之后, 使用 `/dglab connect` 打开连接二维码,
-然后使用 DG-LAB 3.0 app 扫描.
+After add the mod, use `/dglab connect` to open the QRCode.
+Then scan it with DG-LAB 3.0 app.
 
-#### 配置
+#### Configuration
 
-- TODO (或者直接问作者)
+- TODO (or ask the author)
 
 ---
 
-部分代码参考以下开源项目:
+Some code of this project is inspired by the following open-source works:
 - [DG_LAB](https://github.com/CaiJi-ikun/DG_LAB) by [CaiJi-ikun](https://github.com/CaiJi-ikun)
 - [Minecraft-DG-LAB](https://github.com/DancingSnow0517/Minecraft-DG-LAB) by [DancingSnow0517](https://github.com/DancingSnow0517)
 
