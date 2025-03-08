@@ -2,7 +2,9 @@
 
 > 又一个 Minecraft DG-LAB mod
 
-[[README English ver.]](README-en_US.md)
+[English](README_en.md) | 简体中文
+
+*This is my first mod uwu*
 
 ## 功能
 
@@ -24,16 +26,20 @@ TODO
 
 - TODO (或者直接问作者)
 
----
+## 鸣谢
+
+本项目使用了以下开源库:
+- [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
 
 部分代码参考以下开源项目:
 - [DG_LAB](https://github.com/CaiJi-ikun/DG_LAB) by [CaiJi-ikun](https://github.com/CaiJi-ikun)
 - [Minecraft-DG-LAB](https://github.com/DancingSnow0517/Minecraft-DG-LAB) by [DancingSnow0517](https://github.com/DancingSnow0517)
 
----
-
-#### TODO:
+TODO:
 - [ ] QRCode HUD
+- [ ] Info HUD
 - [ ] Auto address
 - [ ] Overlay wave
 - [ ] README.md
+- [ ] I18N
+- [ ] Conf validatePostLoad

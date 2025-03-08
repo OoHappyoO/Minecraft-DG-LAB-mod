@@ -2,6 +2,10 @@
 
 > Another DG-LAB support mod
 
+English | [简体中文](README.md)
+
+*Sorry for my bad English :(*
+
 ## Feature
 
 TODO
@@ -22,16 +26,8 @@ Then scan it with DG-LAB 3.0 app.
 
 - TODO (or ask the author)
 
----
+## Thanks
 
 Some code of this project is inspired by the following open-source works:
 - [DG_LAB](https://github.com/CaiJi-ikun/DG_LAB) by [CaiJi-ikun](https://github.com/CaiJi-ikun)
 - [Minecraft-DG-LAB](https://github.com/DancingSnow0517/Minecraft-DG-LAB) by [DancingSnow0517](https://github.com/DancingSnow0517)
-
----
-
-#### TODO:
-- [ ] QRCode HUD
-- [ ] Auto address
-- [ ] Overlay wave
-- [ ] README.md
