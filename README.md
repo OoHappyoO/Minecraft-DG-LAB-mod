@@ -19,8 +19,10 @@ TODO
   - Mod Menu
   - Cloth Config
 
-添加 mod 之后, 使用 `/dglab connect` 打开连接二维码,
-然后使用 DG-LAB 3.0 app 扫描.
+添加 mod 之后,  
+在配置 (使用 Mod Menu 或 `/dglab` 打开) 里设置 ip,  
+然后使用 `/dglab connect` 打开连接二维码,  
+使用 DG-LAB 3.0 app 扫描.
 
 #### 配置
 

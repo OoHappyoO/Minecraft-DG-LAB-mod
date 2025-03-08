@@ -19,8 +19,10 @@ TODO
   - Mod Menu
   - Cloth Config
 
-After add the mod, use `/dglab connect` to open the QRCode.
-Then scan it with DG-LAB 3.0 app.
+After add the mod,  
+configure IP in the configuration screen (open it with Mod Menu or `/dglab`)
+Then use `/dglab connect` to open the QRCode.  
+Scan it with DG-LAB 3.0 app.
 
 #### Configuration
 
