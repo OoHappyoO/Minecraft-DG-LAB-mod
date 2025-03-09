@@ -16,7 +16,6 @@ import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
 import java.net.InetSocketAddress
 import java.util.*
-import java.util.regex.Pattern
 
 object Server : WebSocketServer(
     InetSocketAddress(AutoConfig.getConfigHolder(Conf::class.java).config.webSocket.port)
@@ -28,8 +27,6 @@ object Server : WebSocketServer(
     var client: WebSocket? = null
     var clientID = UUID.randomUUID().toString()
     var targetID = ""
-    private val strengthPatten: Pattern =
-        Pattern.compile("strength-(\\d+)\\+(\\d+)\\+(\\d+)\\+(\\d+)", Pattern.MULTILINE)
 
     private var heartbeatJob: Job? = null
 
@@ -82,14 +79,18 @@ object Server : WebSocketServer(
                 {
                     targetID = message.targetId
                     sendMessage(Message.bind("200"))
+
                 }
             }
 
             MessageType.MSG ->
-            {
-                val matcher = strengthPatten.matcher(message.message)
-                DGLABClient.strength.byMatcher(matcher)
-            }
+                message.message.let {
+                    when
+                    {
+                        it.startsWith("strength-") -> DGLABClient.strength.byString(it)
+                        else -> Unit
+                    }
+                }
 
             else -> Unit
         }
