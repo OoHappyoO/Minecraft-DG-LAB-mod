@@ -4,6 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
 import gg.happy.dglab.module.api.ChannelType
 import gg.happy.dglab.util.QRCodeUtil
+import gg.happy.dglab.util.getAddressAutoly
 import me.shedaniel.autoconfig.AutoConfig
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
@@ -26,8 +27,19 @@ object Command
                     .then(literal("connect").executes { context ->
                         if (!Server.isRunning)
                             Server.start()
+                        val address =
+                            if (conf.webSocket.address.uppercase() == "AUTO")
+                                getAddressAutoly().also {
+                                    if (it == null)
+                                    {
+                                        context.source.sendFeedback(Text.literal("无法自动获取地址"))
+                                        return@executes 1
+                                    }
+                                }
+                            else
+                                conf.webSocket.address
                         val url =
-                            "https://www.dungeon-lab.com/app-download.php#DGLAB-SOCKET#${if (conf.webSocket.useHttps) "wss" else "ws"}://${conf.webSocket.address}:${conf.webSocket.port}/${Server.clientID}"
+                            "https://www.dungeon-lab.com/app-download.php#DGLAB-SOCKET#${if (conf.webSocket.useHttps) "wss" else "ws"}://${address}:${conf.webSocket.port}/${Server.clientID}"
                         QRCodeUtil.generateQRCodeAndOpen(url)
                         context.source.sendFeedback(Text.literal("扫描二维码"))
                         return@executes 1
@@ -56,7 +68,10 @@ object Command
                                     return@executes 1
                                 })
                             )
-                    )
+                    ).then(literal("debug").executes {
+                        it.source.sendFeedback(Text.literal("${getAddressAutoly()}"))
+                        return@executes 1
+                    })
                     .executes { _ ->
                         MinecraftClient.getInstance().send {
                             val configScreen: Screen = AutoConfig.getConfigScreen(
@@ -72,16 +87,15 @@ object Command
         }
     }
 
-    private fun commandSetStrength(channelType: ChannelType, context: CommandContext<FabricClientCommandSource>)
+    private fun commandSetStrength(type: ChannelType, context: CommandContext<FabricClientCommandSource>)
     {
         if (!Server.isConnected)
         {
             context.source.sendFeedback(Text.literal("未连接"))
             return
         }
-        Server.setStrength(
-            channelType,
-            IntegerArgumentType.getInteger(context, "value")
-        )
+        val value = IntegerArgumentType.getInteger(context, "value").coerceIn(0, Strength.getMaxStrength(type))
+        Server.setStrength(type, value)
+        context.source.sendFeedback(Text.literal("已将 ${type.name} 通道强度设置为 $value"))
     }
 }

@@ -87,7 +87,7 @@ object Server : WebSocketServer(
                 message.message.let {
                     when
                     {
-                        it.startsWith("strength-") -> DGLABClient.strength.byString(it)
+                        it.startsWith("strength-") -> Strength.byString(it)
                         else -> Unit
                     }
                 }

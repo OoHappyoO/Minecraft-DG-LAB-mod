@@ -2,6 +2,7 @@ package gg.happy.dglab.module.hud
 
 import gg.happy.dglab.DGLABClient
 import gg.happy.dglab.module.Conf
+import gg.happy.dglab.module.Strength
 import gg.happy.dglab.module.outputer.OutputterManager
 import me.shedaniel.autoconfig.AutoConfig
 import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback
@@ -20,8 +21,6 @@ object InfoHud
     private val A = OutputterManager.outputterA
     private val B = OutputterManager.outputterB
 
-    private val strength = DGLABClient.strength
-
     fun register()
     {
         HudLayerRegistrationCallback.EVENT.register {
@@ -39,14 +38,14 @@ object InfoHud
             return
         context.drawTextWithShadow(
             mc.textRenderer,
-            "A: ${A.percent}% * ${strength.aCurrentStrength}",
+            "A: ${A.percent}% * ${Strength.aCurrentStrength}",
             conf.hud.x,
             conf.hud.y,
             0xFFFFFF
         )
         context.drawTextWithShadow(
             mc.textRenderer,
-            "B: ${B.percent}% * ${strength.bCurrentStrength}",
+            "B: ${B.percent}% * ${Strength.bCurrentStrength}",
             conf.hud.x,
             conf.hud.y + 10,
             0xFFFFFF

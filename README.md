@@ -40,7 +40,7 @@ TODO
 TODO:
 - [ ] QRCode HUD
 - [ ] Info HUD
-- [ ] Auto address
+- [x] Auto address
 - [ ] Overlay wave
 - [ ] README.md
 - [ ] I18N

@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import com.mojang.logging.LogUtils
 import gg.happy.dglab.module.Command
 import gg.happy.dglab.module.Conf
-import gg.happy.dglab.module.api.Strength
+import gg.happy.dglab.module.Strength
 import gg.happy.dglab.module.hud.InfoHud
 import gg.happy.dglab.module.listener.JoinListener
 import kotlinx.coroutines.CoroutineScope
@@ -22,8 +22,6 @@ object DGLABClient : ClientModInitializer
     val GSON: Gson = GsonBuilder().create()
     val mc: MinecraftClient = MinecraftClient.getInstance()
     val scope = CoroutineScope(Dispatchers.Default)
-
-    val strength = Strength()
 
     override fun onInitializeClient()
     {

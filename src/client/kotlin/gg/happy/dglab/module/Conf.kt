@@ -24,7 +24,7 @@ class Conf : ConfigData
     class WebSocketSetting
     {
         var useHttps = false
-        var address = "127.0.0.1" //TODO AUTO
+        var address = "AUTO"
         var port = 8080
 
         var messageSetting = MessageSetting()
