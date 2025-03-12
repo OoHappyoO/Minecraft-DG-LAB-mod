@@ -3,7 +3,7 @@
 	"id": "dg-lab",
 	"version": "${version}",
 	"name": "DG LAB",
-	"description": "DG LAB websocket support",
+	"description": "Yet another DG-LAB support mod",
 	"authors": [
 		"Happy"
 	],

@@ -1,6 +1,6 @@
 # Minecraft-DG-LAB-mod
 
-> Another DG-LAB support mod
+> Yet another DG-LAB support mod
 
 English | [简体中文](README.md)
 
