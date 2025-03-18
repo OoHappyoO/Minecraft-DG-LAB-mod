@@ -20,9 +20,8 @@ TODO
   - Cloth Config
 
 添加 mod 之后,  
-在配置 (使用 Mod Menu 或 `/dglab` 打开) 里设置 ip,  
-然后使用 `/dglab connect` 打开连接二维码,  
-使用 DG-LAB 3.0 app 扫描.
+使用 `/dglab connect` 打开连接二维码,  
+然后使用 DG-LAB 3.0 app 扫描.
 
 #### 配置
 
@@ -38,9 +37,7 @@ TODO
 - [Minecraft-DG-LAB](https://github.com/DancingSnow0517/Minecraft-DG-LAB) by [DancingSnow0517](https://github.com/DancingSnow0517)
 
 TODO:
-- [ ] QRCode HUD
 - [ ] Info HUD
-- [x] Auto address
 - [ ] Overlay wave
 - [ ] README.md
 - [ ] I18N
