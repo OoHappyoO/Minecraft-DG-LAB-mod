@@ -6,13 +6,12 @@ import gg.happy.dglab.module.Server
 import gg.happy.dglab.module.api.ChannelType
 import gg.happy.dglab.util.PulseUtil
 import kotlinx.coroutines.*
-import net.minecraft.text.Text
 import kotlin.math.pow
 
 class Outputter(
     private val type: ChannelType,
-    private val conf: Conf.PulseSetting,
-    private val messageConf: Conf.WebSocketSetting.MessageSetting
+    private val conf: Conf.Pulse,
+    private val messageConf: Conf.WebSocket.Message
 )
 {
     private val data = Data(conf)
@@ -92,8 +91,8 @@ class Outputter(
         get() = data.getIntPercent()
 
     class Data(
-        private val conf: Conf.PulseSetting,
-        percent: Double = 0.0,
+        private val conf: Conf.Pulse,
+        percent: Double = 0.0, //TODO RENAME
         buffer: Double = 0.0
     )
     {

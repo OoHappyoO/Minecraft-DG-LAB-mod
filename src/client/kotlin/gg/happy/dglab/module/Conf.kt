@@ -8,42 +8,55 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry
 class Conf : ConfigData
 {
     @ConfigEntry.Gui.CollapsibleObject
-    var webSocket = WebSocketSetting()
+    var webSocket = WebSocket()
 
     @ConfigEntry.Gui.CollapsibleObject
-    var pulse = CollapsedPulseSetting()
+    var pulse = CollapsedPulse()
 
     @ConfigEntry.Gui.CollapsibleObject
-    var hud = HUDSetting()
+    var hud = HUD()
 
     override fun validatePostLoad()
     {
         //TODO
     }
 
-    class WebSocketSetting
+    class WebSocket
     {
         var useHttps = false
         var address = "AUTO"
         var port = 8080
 
         @ConfigEntry.Gui.CollapsibleObject
-        var messageSetting = MessageSetting()
+        var message = Message()
+        
+        @ConfigEntry.Gui.CollapsibleObject
+        var qrCode = QRCode()
 
-        class MessageSetting
+        class Message
         {
             var pulseListLength = 5
             var lagCompensation = 100
         }
+
+        class QRCode
+        {
+            @ConfigEntry.ColorPicker
+            var color = 0xF9E49C
+            @ConfigEntry.ColorPicker
+            var background = 0x121212
+
+            var size = 256
+        }
     }
 
-    class CollapsedPulseSetting
+    class CollapsedPulse
     {
         @ConfigEntry.Gui.CollapsibleObject
-        var a = PulseSetting()
+        var a = Pulse()
 
         @ConfigEntry.Gui.CollapsibleObject
-        var b = PulseSetting()
+        var b = Pulse()
 
         @ConfigEntry.Gui.CollapsibleObject
         var others = Others()
@@ -54,7 +67,7 @@ class Conf : ConfigData
         }
     }
 
-    class PulseSetting
+    class Pulse
     {
         var frequency = 100 //TODO
 
@@ -76,7 +89,7 @@ class Conf : ConfigData
         }
     }
 
-    class HUDSetting
+    class HUD
     {
         @ConfigEntry.Gui.CollapsibleObject
         var info = Info()
@@ -96,6 +109,7 @@ class Conf : ConfigData
             var enabled = true
             var x = 10
             var y = 10
+            var size = 147
 
             @ConfigEntry.ColorPicker(allowAlpha = true)
             var shadowColor = 0x7F3E3E3E
