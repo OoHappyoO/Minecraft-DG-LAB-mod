@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder
 import com.mojang.logging.LogUtils
 import gg.happy.dglab.module.Command
 import gg.happy.dglab.module.Conf
-import gg.happy.dglab.module.Strength
-import gg.happy.dglab.module.hud.InfoHud
+import gg.happy.dglab.module.hud.QRCodeHud
 import gg.happy.dglab.module.listener.JoinListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,17 +17,19 @@ import org.slf4j.Logger
 
 object DGLABClient : ClientModInitializer
 {
-    val LOGGER: Logger = LogUtils.getLogger()
-    val GSON: Gson = GsonBuilder().create()
+    val logger: Logger = LogUtils.getLogger()
+    val gson: Gson = GsonBuilder().create()
     val mc: MinecraftClient = MinecraftClient.getInstance()
     val scope = CoroutineScope(Dispatchers.Default)
+    lateinit var conf: Conf
 
     override fun onInitializeClient()
     {
         AutoConfig.register(Conf::class.java, ::JanksonConfigSerializer)
+        conf = AutoConfig.getConfigHolder(Conf::class.java).config
         Command.register()
         JoinListener.register()
-        InfoHud.register()
+        QRCodeHud.register()
 
         //TODO QRCode HUD
     }

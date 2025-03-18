@@ -2,7 +2,9 @@ package gg.happy.dglab.module
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.context.CommandContext
+import gg.happy.dglab.DGLABClient
 import gg.happy.dglab.module.api.ChannelType
+import gg.happy.dglab.module.hud.QRCodeHud
 import gg.happy.dglab.util.QRCodeUtil
 import gg.happy.dglab.util.getAddressAutoly
 import me.shedaniel.autoconfig.AutoConfig
@@ -14,13 +16,11 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
 
-
 object Command
 {
-    val conf = AutoConfig.getConfigHolder(Conf::class.java).config
+    private val conf = DGLABClient.conf
 
-    fun register()
-    {
+    fun register() =
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             dispatcher.register(
                 literal("dglab")
@@ -40,7 +40,13 @@ object Command
                                 conf.webSocket.address
                         val url =
                             "https://www.dungeon-lab.com/app-download.php#DGLAB-SOCKET#${if (conf.webSocket.useHttps) "wss" else "ws"}://${address}:${conf.webSocket.port}/${Server.clientID}"
-                        QRCodeUtil.generateQRCodeAndOpen(url)
+                        if (conf.hud.qrCode.enabled)
+                        {
+                            QRCodeHud.url = url
+                            QRCodeHud.enabled = true
+                        }
+                        else
+                            QRCodeUtil.generateQRCodeThenOpen(url)
                         context.source.sendFeedback(Text.literal("扫描二维码"))
                         return@executes 1
                     })
@@ -51,7 +57,10 @@ object Command
                             context.source.sendFeedback(Text.literal("断开连接"))
                         }
                         else
+                        {
+                            QRCodeHud.enabled = false
                             context.source.sendFeedback(Text.literal("未连接"))
+                        }
                         return@executes 1
                     })
                     .then(
@@ -68,10 +77,7 @@ object Command
                                     return@executes 1
                                 })
                             )
-                    ).then(literal("debug").executes {
-                        it.source.sendFeedback(Text.literal("${getAddressAutoly()}"))
-                        return@executes 1
-                    })
+                    )
                     .executes { _ ->
                         MinecraftClient.getInstance().send {
                             val configScreen: Screen = AutoConfig.getConfigScreen(
@@ -83,9 +89,7 @@ object Command
                         return@executes 1
                     }
             )
-
         }
-    }
 
     private fun commandSetStrength(type: ChannelType, context: CommandContext<FabricClientCommandSource>)
     {

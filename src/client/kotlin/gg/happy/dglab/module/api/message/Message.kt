@@ -10,7 +10,7 @@ class Message(
     var message: String = ""
 )
 {
-    fun toJson(): String = DGLABClient.GSON.toJson(this)
+    fun toJson(): String = DGLABClient.gson.toJson(this)
 
     companion object
     {

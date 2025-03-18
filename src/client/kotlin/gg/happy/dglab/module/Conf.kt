@@ -27,6 +27,7 @@ class Conf : ConfigData
         var address = "AUTO"
         var port = 8080
 
+        @ConfigEntry.Gui.CollapsibleObject
         var messageSetting = MessageSetting()
 
         class MessageSetting
@@ -44,6 +45,7 @@ class Conf : ConfigData
         @ConfigEntry.Gui.CollapsibleObject
         var b = PulseSetting()
 
+        @ConfigEntry.Gui.CollapsibleObject
         var others = Others()
 
         class Others
@@ -54,7 +56,7 @@ class Conf : ConfigData
 
     class PulseSetting
     {
-        var frequency = 100
+        var frequency = 100 //TODO
 
         var maximum = 1.5
         var increaseRate = 0.2
@@ -74,9 +76,29 @@ class Conf : ConfigData
         }
     }
 
-    class HUDSetting{
-        var enabled = false
-        var x = 0
-        var y = 0
+    class HUDSetting
+    {
+        @ConfigEntry.Gui.CollapsibleObject
+        var info = Info()
+
+        @ConfigEntry.Gui.CollapsibleObject
+        var qrCode = QRCode()
+
+        class Info
+        {
+            var enabled = false
+            var x = 10
+            var y = 10
+        }
+
+        class QRCode
+        {
+            var enabled = true
+            var x = 10
+            var y = 10
+
+            @ConfigEntry.ColorPicker(allowAlpha = true)
+            var shadowColor = 0x7F3E3E3E
+        }
     }
 }

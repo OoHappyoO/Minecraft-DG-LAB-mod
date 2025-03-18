@@ -4,6 +4,8 @@ import gg.happy.dglab.DGLABClient
 import gg.happy.dglab.module.api.ChannelType
 import gg.happy.dglab.module.api.message.Message
 import gg.happy.dglab.module.api.message.MessageType
+import gg.happy.dglab.module.hud.InfoHud
+import gg.happy.dglab.module.hud.QRCodeHud
 import gg.happy.dglab.module.outputer.OutputterManager
 import gg.happy.dglab.util.toArrayString
 import kotlinx.coroutines.Job
@@ -41,7 +43,10 @@ object Server : WebSocketServer(
         isConnected = true
         sendMessage(Message.bind("targetId"))
 
+        QRCodeHud.enabled = false
+        InfoHud.enabled = true
         OutputterManager.initJob()
+
         heartbeatJob = DGLABClient.scope.launch {
             var next = System.currentTimeMillis()
             while (isConnected)
@@ -59,6 +64,7 @@ object Server : WebSocketServer(
             return
 
         OutputterManager.stopJob()
+        InfoHud.enabled = false
 
         isConnected = false
         heartbeatJob?.cancel()
@@ -70,7 +76,7 @@ object Server : WebSocketServer(
     {
         if (conn != client)
             return
-        val message = DGLABClient.GSON.fromJson(messageText, Message::class.java)
+        val message = DGLABClient.gson.fromJson(messageText, Message::class.java)
         when (message.type)
         {
             MessageType.BIND ->
