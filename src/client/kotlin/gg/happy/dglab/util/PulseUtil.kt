@@ -21,19 +21,19 @@ object PulseUtil
      * input frequency and strength list, return the pulse string
      *
      * @param frequencies frequency list
-     * @param percent     percent list
+     * @param strengths   strengths list
      * @return the pulse strings
      */
-    fun pulse(frequencies: List<Int>, percent: List<Int>): List<String> =
+    fun pulse(frequencies: List<Int>, strengths: List<Int>): List<String> =
         mutableListOf<String>().apply {
-            val size = percent.size and frequencies.size
+            val size = strengths.size and frequencies.size
             for (i in 0 until size step 4)
             {
                 add(buildString {
                     for (j in 0 until 4)
                         append(String.format("%02X", convert(frequencies.getOrElse(i + j) { 10 })))
                     for (j in 0 until 4)
-                        append(String.format("%02X", percent.getOrElse(i + j) { 0 }))
+                        append(String.format("%02X", strengths.getOrElse(i + j) { 0 }))
                 })
             }
         }
@@ -42,12 +42,12 @@ object PulseUtil
      * input frequency and strength list, return the pulse string
      *
      * @param frequency frequency
-     * @param percent   strength list
+     * @param strengths strengths list
      * @return the pulse strings
      */
-    fun pulse(frequency: Int, percent: List<Int>): List<String> =
+    fun pulse(frequency: Int, strengths: List<Int>): List<String> =
         mutableListOf<String>().apply {
-            val size = percent.size
+            val size = strengths.size
             val frequencyHex = String.format("%02X", convert(frequency))
             val frequencyString = buildString {
                 repeat(4) { append(frequencyHex) }
@@ -57,7 +57,7 @@ object PulseUtil
                 add(buildString {
                     append(frequencyString)
                     for (j in 0 until 4)
-                        append(String.format("%02X", percent.getOrElse(i + j) { 0 }))
+                        append(String.format("%02X", strengths.getOrElse(i + j) { 0 }))
                 })
             }
         }

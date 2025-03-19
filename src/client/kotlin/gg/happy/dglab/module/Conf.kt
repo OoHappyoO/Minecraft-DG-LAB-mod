@@ -78,7 +78,7 @@ class Conf : ConfigData
         var increaseRate = 0.2
         var decreaseRate = 0.04
         var compressor = 0.5
-        var multiple = 1.0
+        var multiplier = 1.0
 
         @ConfigEntry.Gui.CollapsibleObject
         var onEvent = OnEvent()

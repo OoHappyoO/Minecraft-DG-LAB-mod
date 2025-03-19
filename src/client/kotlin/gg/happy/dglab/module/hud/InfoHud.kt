@@ -16,14 +16,14 @@ object InfoHud : HudAdapter("info-hud")
             return
         context.drawTextWithShadow(
             mc.textRenderer,
-            "A: ${A.percent}% * ${Strength.aCurrentStrength}",
+            "A: ${A.strength}% * ${Strength.aCurrentStrength}",
             conf.hud.info.x,
             conf.hud.info.y,
             0xFFFFFF
         )
         context.drawTextWithShadow(
             mc.textRenderer,
-            "B: ${B.percent}% * ${Strength.bCurrentStrength}",
+            "B: ${B.strength}% * ${Strength.bCurrentStrength}",
             conf.hud.info.x,
             conf.hud.info.y + 10,
             0xFFFFFF

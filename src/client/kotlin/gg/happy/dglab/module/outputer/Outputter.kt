@@ -52,7 +52,7 @@ class Outputter(
                     repeat(messageConf.length * 4) {
                         if (data.isIgnorable)
                             return@apply
-                        add(data.getIntPercent())
+                        add(data.getIntstrength())
                         data.iterate()
                     }
                 }
@@ -71,7 +71,7 @@ class Outputter(
 
     fun onDamage(damage: Double)
     {
-        data.buffer += (damage / 20).pow(conf.compressor) * conf.multiple
+        data.buffer += (damage / 20).pow(conf.compressor) * conf.multiplier
         isChanged = true
     }
 
@@ -87,21 +87,21 @@ class Outputter(
         isChanged = true
     }
 
-    val percent: Int
-        get() = data.getIntPercent()
+    val strength: Int
+        get() = data.getIntstrength()
 
     class Data(
         private val conf: Conf.Pulse,
-        percent: Double = 0.0, //TODO RENAME
+        strength: Double = 0.0,
         buffer: Double = 0.0
     )
     {
         companion object
         {
-            fun copy(data: Data): Data = Data(data.conf, data.percent, data.buffer)
+            fun copy(data: Data): Data = Data(data.conf, data.strength, data.buffer)
         }
 
-        var percent = percent
+        var strength = strength
             set(value)
             {
                 field = value.coerceIn(0.0, conf.maximum)
@@ -115,19 +115,19 @@ class Outputter(
 
         fun iterate()
         {
-            percent = percent * (1.0 - conf.decreaseRate) + buffer * conf.increaseRate
+            strength = strength * (1.0 - conf.decreaseRate) + buffer * conf.increaseRate
             buffer *= (1.0 - conf.increaseRate)
         }
 
-        fun getIntPercent() =
-            (percent * 100).toInt().coerceIn(0, 100)
+        fun getIntstrength() =
+            (strength * 100).toInt().coerceIn(0, 100)
 
         fun reset()
         {
-            percent = 0.0
+            strength = 0.0
             buffer = 0.0
         }
 
-        val isIgnorable get() = percent < 0.01 && buffer < 0.01
+        val isIgnorable get() = strength < 0.01 && buffer < 0.01
     }
 }
