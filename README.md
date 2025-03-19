@@ -40,5 +40,4 @@ TODO:
 - [ ] Info HUD
 - [ ] Overlay wave
 - [ ] README.md
-- [ ] I18N
 - [ ] Conf validatePostLoad
