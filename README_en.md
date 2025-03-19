@@ -29,6 +29,10 @@ Then scan it with DG-LAB 3.0 app.
 
 ## Thanks
 
+This project uses the following open-source libraries:
+- [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
+- [Renderer](https://github.com/0x3C50/Renderer) by [0x3C50](https://github.com/0x3C50)
+
 Some code of this project is inspired by the following open-source works:
 - [DG_LAB](https://github.com/CaiJi-ikun/DG_LAB) by [CaiJi-ikun](https://github.com/CaiJi-ikun)
 - [Minecraft-DG-LAB](https://github.com/DancingSnow0517/Minecraft-DG-LAB) by [DancingSnow0517](https://github.com/DancingSnow0517)
