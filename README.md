@@ -31,6 +31,7 @@ TODO
 
 本项目使用了以下开源库:
 - [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
+- [Renderer](https://github.com/0x3C50/Renderer) by [0x3C50](https://github.com/0x3C50)
 
 部分代码参考以下开源项目:
 - [DG_LAB](https://github.com/CaiJi-ikun/DG_LAB) by [CaiJi-ikun](https://github.com/CaiJi-ikun)
