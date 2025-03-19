@@ -69,7 +69,7 @@ object Server : WebSocketServer(
         isConnected = false
         heartbeatJob?.cancel()
         client = null
-        DGLABClient.mc.player?.sendMessage(Text.literal("disconnected: $reason"), false)
+        DGLABClient.mc.player?.sendMessage(Text.translatable("text.dg-lab.disconnect", reason), false)
     }
 
     override fun onMessage(conn: WebSocket?, messageText: String?)

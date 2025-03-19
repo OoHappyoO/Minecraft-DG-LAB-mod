@@ -49,7 +49,7 @@ class Outputter(
             while (!data.isIgnorable)
             {
                 val strengths = mutableListOf<Int>().apply {
-                    repeat(messageConf.pulseListLength * 4) {
+                    repeat(messageConf.length * 4) {
                         if (data.isIgnorable)
                             return@apply
                         add(data.getIntPercent())
@@ -57,7 +57,7 @@ class Outputter(
                     }
                 }
                 Server.addPulse(type, PulseUtil.pulse(conf.frequency, strengths))
-                next += messageConf.pulseListLength * 100
+                next += messageConf.length * 100
                 delay(next - System.currentTimeMillis())
             }
         }

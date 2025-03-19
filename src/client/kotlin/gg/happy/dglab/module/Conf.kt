@@ -23,10 +23,12 @@ class Conf : ConfigData
 
     class WebSocket
     {
+        @ConfigEntry.Gui.Tooltip
         var useHttps = false
         var address = "AUTO"
         var port = 8080
 
+        @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject
         var message = Message()
         
@@ -35,7 +37,7 @@ class Conf : ConfigData
 
         class Message
         {
-            var pulseListLength = 5
+            var length = 5
             var lagCompensation = 100
         }
 
@@ -63,6 +65,7 @@ class Conf : ConfigData
 
         class Others
         {
+            @ConfigEntry.Gui.Tooltip
             var rawDamageInput = false
         }
     }
@@ -106,6 +109,7 @@ class Conf : ConfigData
 
         class QRCode
         {
+            @ConfigEntry.Gui.Tooltip
             var enabled = true
             var x = 10
             var y = 10

@@ -32,7 +32,7 @@ object Command
                                 getAddressAutoly().also {
                                     if (it == null)
                                     {
-                                        context.source.sendFeedback(Text.literal("无法自动获取地址"))
+                                        context.source.sendFeedback(Text.translatable("text.dg-lab.cannot-get-address"))
                                         return@executes 1
                                     }
                                 }
@@ -47,19 +47,16 @@ object Command
                         }
                         else
                             QRCodeUtil.generateQRCodeThenOpen(url)
-                        context.source.sendFeedback(Text.literal("扫描二维码"))
+                        context.source.sendFeedback(Text.translatable("text.dg-lab.scan"))
                         return@executes 1
                     })
                     .then(literal("disconnect").executes { context ->
                         if (Server.isConnected)
-                        {
                             Server.disconnect()
-                            context.source.sendFeedback(Text.literal("断开连接"))
-                        }
                         else
                         {
                             QRCodeHud.enabled = false
-                            context.source.sendFeedback(Text.literal("未连接"))
+                            context.source.sendFeedback(Text.translatable("text.dg-lab.isn't-connected"))
                         }
                         return@executes 1
                     })
@@ -95,11 +92,11 @@ object Command
     {
         if (!Server.isConnected)
         {
-            context.source.sendFeedback(Text.literal("未连接"))
+            context.source.sendFeedback(Text.translatable("text.dg-lab.isn't-connected"))
             return
         }
         val value = IntegerArgumentType.getInteger(context, "value").coerceIn(0, Strength.getMaxStrength(type))
         Server.setStrength(type, value)
-        context.source.sendFeedback(Text.literal("已将 ${type.name} 通道强度设置为 $value"))
+        context.source.sendFeedback(Text.translatable("text.dg-lab.set-strength", type.id, value))
     }
 }
