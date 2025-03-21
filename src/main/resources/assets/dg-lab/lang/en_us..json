@@ -5,6 +5,12 @@
   "text.dg-lab.isn't-connected": "§8[§c!§8] §7Not connected yet.",
   "text.dg-lab.disconnect": "§8[§e!§8] §7Connection terminated. §8%s",
   "text.dg-lab.set-strength": "§8[§e!§8] §7Set §f%s §7channel strength to §f%s§7.",
+  "text.dg-lab.preset.save-to": "§8[§a√§8] §7Saved current configuration as preset §f%s§7.",
+  "text.dg-lab.preset.apply": "§8[§a√§8] §7Applied preset §f%s§7.",
+  "text.dg-lab.preset.rename": "§8[§a√§8] §7Renamed preset §f%s §7to §f%s.",
+  "text.dg-lab.preset.delete": "§8[§e!§8] §7Preset §f%s §7has been §cdeleted§7.",
+  "text.dg-lab.preset.cannot-find": "§8[§c!§8] §7Preset §f%s §7not found.",
+  "text.dg-lab.preset.already-exists": "§8[§c!§8] §f%s §7already exists.",
 
   "text.autoconfig.dg-lab.title": "DG-LAB Mod Settings",
   "text.autoconfig.dg-lab.option.webSocket": "WebSocket Settings",

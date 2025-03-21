@@ -5,6 +5,12 @@
   "text.dg-lab.isn't-connected": "§8[§c!§8] §7暂未连接.",
   "text.dg-lab.disconnect": "§8[§e!§8] §7连接已断开. §8%s",
   "text.dg-lab.set-strength": "§8[§e!§8] §7已将 §f%s §7通道的强度设置为 §f%s§7.",
+  "text.dg-lab.preset.save-to": "§8[§a√§8] §7已将当前配置文件保存为预设 §f%s§7.",
+  "text.dg-lab.preset.apply": "§8[§a√§8] §7已应用预设 §f%s§7.",
+  "text.dg-lab.preset.rename": "§8[§a√§8] §7已将预设 §f%s §7重命名为 §f%s.",
+  "text.dg-lab.preset.delete": "§8[§e!§8] §7已§c删除§7预设 §f%s§7.",
+  "text.dg-lab.preset.cannot-find": "§8[§c!§8] §7无法找到预设 §f%s§7.",
+  "text.dg-lab.preset.already-exists": "§8[§c!§8] §f%s §7已被占用.",
 
   "text.autoconfig.dg-lab.title": "DG-LAB mod 设置",
   "text.autoconfig.dg-lab.option.webSocket": "WebSocket 设置",

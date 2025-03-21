@@ -4,17 +4,20 @@ import gg.happy.dglab.DGLABClient
 import gg.happy.dglab.module.Conf
 import gg.happy.dglab.module.Server
 import gg.happy.dglab.module.api.ChannelType
+import gg.happy.dglab.module.outputer.Outputter.Data.Companion.copy
 import gg.happy.dglab.util.PulseUtil
 import kotlinx.coroutines.*
 import kotlin.math.pow
 
 class Outputter(
     private val type: ChannelType,
-    private val conf: Conf.Pulse,
-    private val messageConf: Conf.WebSocket.Message
+    private val confGetter: () -> Conf.Pulse,
+    private val messageConf: Conf.WebSocket.Message,
 )
 {
-    private val data = Data(conf)
+    private val conf get() = confGetter()
+
+    private val data = Data(confGetter)
 
     private var isChanged = false
 
@@ -26,6 +29,7 @@ class Outputter(
     {
         data.reset()
         isChanged = false
+        updateJob?.cancel()
         updateJob = DGLABClient.scope.launch {
             var next = System.currentTimeMillis()
             while (isActive)
@@ -40,10 +44,10 @@ class Outputter(
     }
 
     private suspend fun resetOutputJob() = coroutineScope {
-        outputJob?.cancelAndJoin()
         isChanged = false
+        outputJob?.cancelAndJoin()
         outputJob = DGLABClient.scope.launch {
-            val data = Data.copy(data)
+            val data = data.copy()
             var next = System.currentTimeMillis() - messageConf.lagCompensation
             Server.cleanPulse(type)
             while (!data.isIgnorable)
@@ -52,7 +56,7 @@ class Outputter(
                     repeat(messageConf.length * 4) {
                         if (data.isIgnorable)
                             return@apply
-                        add(data.getIntstrength())
+                        add(data.getIntStrength())
                         data.iterate()
                     }
                 }
@@ -88,18 +92,20 @@ class Outputter(
     }
 
     val strength: Int
-        get() = data.getIntstrength()
+        get() = data.getIntStrength()
 
     class Data(
-        private val conf: Conf.Pulse,
+        private val confGetter: () -> Conf.Pulse,
         strength: Double = 0.0,
         buffer: Double = 0.0
     )
     {
         companion object
         {
-            fun copy(data: Data): Data = Data(data.conf, data.strength, data.buffer)
+            fun Data.copy(): Data = Data(confGetter, strength, buffer)
         }
+
+        private val conf get() = confGetter()
 
         var strength = strength
             set(value)
@@ -119,7 +125,7 @@ class Outputter(
             buffer *= (1.0 - conf.increaseRate)
         }
 
-        fun getIntstrength() =
+        fun getIntStrength() =
             (strength * 100).toInt().coerceIn(0, 100)
 
         fun reset()

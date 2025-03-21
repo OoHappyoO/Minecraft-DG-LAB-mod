@@ -1,11 +1,12 @@
 package gg.happy.dglab.module.listener
 
+import gg.happy.dglab.module.api.Registrable
 import gg.happy.dglab.module.outputer.OutputterManager
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 
-object JoinListener
+object JoinListener : Registrable
 {
-    fun register()
+    override fun register()
     {
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
             OutputterManager.useServerDetection = false

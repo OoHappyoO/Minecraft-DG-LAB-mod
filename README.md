@@ -31,14 +31,9 @@ TODO
 
 本项目使用了以下开源库:
 - [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
+- [Kotlin-DeepCopy](https://github.com/bennyhuo/kotlin-deepcopy) by [bennyhuo](https://github.com/bennyhuo)
 - [Renderer](https://github.com/0x3C50/Renderer) by [0x3C50](https://github.com/0x3C50)
 
 部分代码参考以下开源项目:
 - [DG_LAB](https://github.com/CaiJi-ikun/DG_LAB) by [CaiJi-ikun](https://github.com/CaiJi-ikun)
 - [Minecraft-DG-LAB](https://github.com/DancingSnow0517/Minecraft-DG-LAB) by [DancingSnow0517](https://github.com/DancingSnow0517)
-
-TODO:
-- [ ] Info HUD
-- [ ] Overlay wave
-- [ ] README.md
-- [ ] Conf validatePostLoad

@@ -1,5 +1,6 @@
 package gg.happy.dglab.module;
 
+import com.bennyhuo.kotlin.deepcopy.annotations.DeepCopy
 import me.shedaniel.autoconfig.ConfigData
 import me.shedaniel.autoconfig.annotation.Config
 import me.shedaniel.autoconfig.annotation.ConfigEntry
@@ -16,6 +17,9 @@ class Conf : ConfigData
     @ConfigEntry.Gui.CollapsibleObject
     var hud = HUD()
 
+    @ConfigEntry.Gui.Excluded
+    var preset = mutableMapOf<String, CollapsedPulse>()
+
     override fun validatePostLoad()
     {
         //TODO
@@ -31,7 +35,7 @@ class Conf : ConfigData
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.CollapsibleObject
         var message = Message()
-        
+
         @ConfigEntry.Gui.CollapsibleObject
         var qrCode = QRCode()
 
@@ -45,6 +49,7 @@ class Conf : ConfigData
         {
             @ConfigEntry.ColorPicker
             var color = 0xF9E49C
+
             @ConfigEntry.ColorPicker
             var background = 0x121212
 
@@ -52,45 +57,45 @@ class Conf : ConfigData
         }
     }
 
-    class CollapsedPulse
-    {
+    @DeepCopy
+    data class CollapsedPulse(
         @ConfigEntry.Gui.CollapsibleObject
-        var a = Pulse()
-
-        @ConfigEntry.Gui.CollapsibleObject
-        var b = Pulse()
+        var a: Pulse = Pulse(),
 
         @ConfigEntry.Gui.CollapsibleObject
-        var others = Others()
-
-        class Others
-        {
-            @ConfigEntry.Gui.Tooltip
-            var rawDamageInput = false
-        }
-    }
-
-    class Pulse
-    {
-        var frequency = 100 //TODO
-
-        var maximum = 1.5
-        var increaseRate = 0.2
-        var decreaseRate = 0.04
-        var compressor = 0.5
-        var multiplier = 1.0
+        var b: Pulse = Pulse(),
 
         @ConfigEntry.Gui.CollapsibleObject
-        var onEvent = OnEvent()
+        var others: Others = Others()
+    )
 
-        //TODO Overlay wave
+    @DeepCopy
+    data class Pulse(
+        var frequency: Int = 100, //TODO
 
-        class OnEvent
-        {
-            var onDeath = 0.5
-            var onTotemPop = 0.3
-        }
-    }
+        var maximum: Double = 1.5,
+        var increaseRate: Double = 0.2,
+        var decreaseRate: Double = 0.04,
+        var compressor: Double = 0.5,
+        var multiplier: Double = 1.0,
+
+        @ConfigEntry.Gui.CollapsibleObject
+        var onEvent: OnEvent = OnEvent()
+    )
+
+    @DeepCopy
+    data class OnEvent(
+        var onDeath: Double = 0.5,
+        var onTotemPop: Double = 0.3
+    )
+
+    //TODO Overlay wave
+
+    @DeepCopy
+    data class Others(
+        @ConfigEntry.Gui.Tooltip
+        var rawDamageInput: Boolean = false
+    )
 
     class HUD
     {

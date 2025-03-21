@@ -1,10 +1,18 @@
 package gg.happy.dglab.module
 
 import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
+import com.mojang.brigadier.exceptions.CommandSyntaxException
+import com.mojang.brigadier.suggestion.SuggestionProvider
+import com.mojang.brigadier.suggestion.Suggestions
+import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import gg.happy.dglab.DGLABClient
 import gg.happy.dglab.module.api.ChannelType
+import gg.happy.dglab.module.api.Registrable
+import gg.happy.dglab.module.hud.InfoHud
 import gg.happy.dglab.module.hud.QRCodeHud
+import gg.happy.dglab.module.outputer.OutputterManager
 import gg.happy.dglab.util.QRCodeUtil
 import gg.happy.dglab.util.getAddressAutoly
 import me.shedaniel.autoconfig.AutoConfig
@@ -15,12 +23,13 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.text.Text
+import java.util.concurrent.CompletableFuture
 
-object Command
+object Command : Registrable
 {
     private val conf = DGLABClient.conf
 
-    fun register() =
+    override fun register() =
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             dispatcher.register(
                 literal("dglab")
@@ -32,7 +41,7 @@ object Command
                                 getAddressAutoly().also {
                                     if (it == null)
                                     {
-                                        context.source.sendFeedback(Text.translatable("text.dg-lab.cannot-get-address"))
+                                        context.send("text.dg-lab.cannot-get-address")
                                         return@executes 1
                                     }
                                 }
@@ -47,7 +56,7 @@ object Command
                         }
                         else
                             QRCodeUtil.generateQRCodeThenOpen(url)
-                        context.source.sendFeedback(Text.translatable("text.dg-lab.scan"))
+                        context.send("text.dg-lab.scan")
                         return@executes 1
                     })
                     .then(literal("disconnect").executes { context ->
@@ -56,10 +65,82 @@ object Command
                         else
                         {
                             QRCodeHud.enabled = false
-                            context.source.sendFeedback(Text.translatable("text.dg-lab.isn't-connected"))
+                            context.send("text.dg-lab.isn't-connected")
                         }
                         return@executes 1
                     })
+                    .then(
+                        literal("preset")
+                            .then(
+                                literal("saveTo")
+                                    .then(
+                                        argument("name", StringArgumentType.string())
+                                            .suggests(PresetSuggestionProvider())
+                                            .executes { context ->
+                                                val name = StringArgumentType.getString(context, "name")
+                                                conf.preset[name] = conf.pulse.deepCopy()
+                                                DGLABClient.configHolder.save()
+                                                context.send("text.dg-lab.preset.save-to", name)
+                                                return@executes 1
+                                            })
+                            )
+                            .then(
+                                literal("apply")
+                                    .then(
+                                        argument("name", StringArgumentType.string())
+                                            .suggests(PresetSuggestionProvider())
+                                            .executes { context ->
+                                                val name = StringArgumentType.getString(context, "name")
+                                                conf.preset[name]?.let {
+                                                    conf.pulse = it.deepCopy()
+                                                    DGLABClient.configHolder.save()
+                                                    context.send("text.dg-lab.preset.apply", name)
+                                                } ?: context.send("text.dg-lab.preset.cannot-find", name)
+                                                return@executes 1
+                                            })
+                            )
+                            .then(
+                                literal("rename")
+                                    .then(
+                                        argument("name", StringArgumentType.string())
+                                            .suggests(PresetSuggestionProvider())
+                                            .then(argument("newName", StringArgumentType.string()).executes { context ->
+                                                val name = StringArgumentType.getString(context, "name")
+                                                val newName = StringArgumentType.getString(context, "newName")
+                                                if (!conf.preset.containsKey(name))
+                                                {
+                                                    context.send("text.dg-lab.preset.cannot-find", name)
+                                                    return@executes 1
+                                                }
+                                                if (conf.preset.containsKey(newName))
+                                                {
+                                                    context.send("text.dg-lab.preset.already-exists", newName)
+                                                    return@executes 1
+                                                }
+                                                conf.preset.remove(name)?.let {
+                                                    conf.preset[newName] = it
+                                                    DGLABClient.configHolder.save()
+                                                    context.send("text.dg-lab.preset.rename", name, newName)
+                                                }
+                                                return@executes 1
+                                            })
+                                    )
+                            )
+                            .then(
+                                literal("delete")
+                                    .then(
+                                        argument("name", StringArgumentType.string())
+                                            .suggests(PresetSuggestionProvider())
+                                            .executes { context ->
+                                                val name = StringArgumentType.getString(context, "name")
+                                                conf.preset.remove(name)?.let {
+                                                    context.send("text.dg-lab.preset.delete", name)
+                                                    DGLABClient.configHolder.save()
+                                                } ?: context.send("text.dg-lab.preset.cannot-find", name)
+                                                return@executes 1
+                                            })
+                            )
+                    )
                     .then(
                         literal("setStrength")
                             .then(
@@ -88,15 +169,33 @@ object Command
             )
         }
 
+    private fun CommandContext<FabricClientCommandSource>.send(key: String, vararg args: Any) =
+        source.sendFeedback(Text.translatable(key, *args))
+
     private fun commandSetStrength(type: ChannelType, context: CommandContext<FabricClientCommandSource>)
     {
         if (!Server.isConnected)
         {
-            context.source.sendFeedback(Text.translatable("text.dg-lab.isn't-connected"))
+            context.send("text.dg-lab.isn't-connected")
             return
         }
         val value = IntegerArgumentType.getInteger(context, "value").coerceIn(0, Strength.getMaxStrength(type))
         Server.setStrength(type, value)
-        context.source.sendFeedback(Text.translatable("text.dg-lab.set-strength", type.id, value))
+        context.send("text.dg-lab.set-strength", type.id, value)
+    }
+
+    class PresetSuggestionProvider : SuggestionProvider<FabricClientCommandSource>
+    {
+        @Throws(CommandSyntaxException::class)
+        override fun getSuggestions(
+            context: CommandContext<FabricClientCommandSource>,
+            builder: SuggestionsBuilder
+        ): CompletableFuture<Suggestions>
+        {
+            conf.preset.forEach { (key, _) ->
+                builder.suggest(key)
+            }
+            return builder.buildFuture()
+        }
     }
 }

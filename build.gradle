@@ -1,7 +1,8 @@
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
-	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "2.1.10"
+	id "com.google.devtools.ksp" version "2.1.10-1.0.31"
+//	id "org.jetbrains.kotlin.kapt" version "2.1.10"
 }
 
 version = project.mod_version
@@ -17,6 +18,7 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	mavenCentral()
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
 }
@@ -47,6 +49,11 @@ dependencies {
 	implementation 'org.java-websocket:Java-WebSocket:1.6.0'
 	include 'com.google.zxing:core:3.5.3'
 	include 'org.java-websocket:Java-WebSocket:1.6.0'
+
+	ksp "com.bennyhuo.kotlin:deepcopy-compiler-ksp:1.9.20-1.0.1"
+//	kapt "com.bennyhuo.kotlin:deepcopy-compiler-kapt:1.9.20-1.0.1"
+	implementation "com.bennyhuo.kotlin:deepcopy-runtime:1.9.20-1.0.1"
+	include "com.bennyhuo.kotlin:deepcopy-runtime:1.9.20-1.0.1"
 
 	modImplementation "io.github.0x3c50.renderer:renderer-fabric:1.2.5"
 	include "io.github.0x3c50.renderer:renderer-fabric:1.2.5"
@@ -92,23 +99,5 @@ jar {
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
-	}
-}
-
-// configure the maven publication
-publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
 	}
 }

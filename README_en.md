@@ -31,6 +31,7 @@ Then scan it with DG-LAB 3.0 app.
 
 This project uses the following open-source libraries:
 - [Java-WebSocket](https://github.com/TooTallNate/Java-WebSocket)
+- [Kotlin-DeepCopy](https://github.com/bennyhuo/kotlin-deepcopy) by [bennyhuo](https://github.com/bennyhuo)
 - [Renderer](https://github.com/0x3C50/Renderer) by [0x3C50](https://github.com/0x3C50)
 
 Some code of this project is inspired by the following open-source works:
