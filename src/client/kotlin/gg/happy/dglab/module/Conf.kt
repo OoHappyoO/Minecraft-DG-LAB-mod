@@ -71,7 +71,8 @@ class Conf : ConfigData
 
     @DeepCopy
     data class Pulse(
-        var frequency: Int = 100, //TODO
+        @ConfigEntry.Gui.CollapsibleObject
+        var frequency: Frequency = Frequency(),
 
         var maximum: Double = 1.5,
         var increaseRate: Double = 0.2,
@@ -81,6 +82,12 @@ class Conf : ConfigData
 
         @ConfigEntry.Gui.CollapsibleObject
         var onEvent: OnEvent = OnEvent()
+    )
+
+    @DeepCopy
+    data class Frequency(
+        val from: Int = 10,
+        val to: Int = 100
     )
 
     @DeepCopy

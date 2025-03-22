@@ -8,6 +8,7 @@ import gg.happy.dglab.module.outputer.Outputter.Data.Companion.copy
 import gg.happy.dglab.util.PulseUtil
 import kotlinx.coroutines.*
 import kotlin.math.pow
+import kotlin.math.round
 
 class Outputter(
     private val type: ChannelType,
@@ -52,15 +53,17 @@ class Outputter(
             Server.cleanPulse(type)
             while (!data.isIgnorable)
             {
-                val strengths = mutableListOf<Int>().apply {
-                    repeat(messageConf.length * 4) {
-                        if (data.isIgnorable)
-                            return@apply
-                        add(data.getIntStrength())
-                        data.iterate()
-                    }
+                val frequencies = mutableListOf<Int>()
+                val strengths = mutableListOf<Int>()
+                for (i in 0 until messageConf.length * 4)
+                {
+                    if (data.isIgnorable)
+                        break
+                    frequencies.add(data.frequency)
+                    strengths.add(data.intStrength)
+                    data.iterate()
                 }
-                Server.addPulse(type, PulseUtil.pulse(conf.frequency, strengths))
+                Server.addPulse(type, PulseUtil.pulse(frequencies, strengths))
                 next += messageConf.length * 100
                 delay(next - System.currentTimeMillis())
             }
@@ -92,17 +95,18 @@ class Outputter(
     }
 
     val strength: Int
-        get() = data.getIntStrength()
+        get() = data.intStrength
 
     class Data(
         private val confGetter: () -> Conf.Pulse,
         strength: Double = 0.0,
-        buffer: Double = 0.0
+        buffer: Double = 0.0,
+        private var crest: Double = 0.0
     )
     {
         companion object
         {
-            fun Data.copy(): Data = Data(confGetter, strength, buffer)
+            fun Data.copy(): Data = Data(confGetter, strength, buffer, crest)
         }
 
         private val conf get() = confGetter()
@@ -121,17 +125,27 @@ class Outputter(
 
         fun iterate()
         {
-            strength = strength * (1.0 - conf.decreaseRate) + buffer * conf.increaseRate
+            val delta = buffer * conf.increaseRate - strength * conf.decreaseRate
+            strength += delta
+            if (delta > 0)
+                crest = strength.coerceIn(0.0, 1.0)
             buffer *= (1.0 - conf.increaseRate)
         }
 
-        fun getIntStrength() =
-            (strength * 100).toInt().coerceIn(0, 100)
+        val intStrength
+            get() = (strength * 100).toInt().coerceIn(0, 100)
+
+        val frequency
+            get() = round(
+                (strength / crest).coerceIn(0.0, 1.0)
+                    .let { conf.frequency.from * it + conf.frequency.to * (1.0 - it) }
+            ).toInt()
 
         fun reset()
         {
             strength = 0.0
             buffer = 0.0
+            crest = 0.0
         }
 
         val isIgnorable get() = strength < 0.01 && buffer < 0.01

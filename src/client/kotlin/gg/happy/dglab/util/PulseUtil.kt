@@ -14,7 +14,7 @@ object PulseUtil
             in 10..100 -> frequency
             in 101..600 -> (frequency - 100) / 5 + 100
             in 601..1000 -> (frequency - 600) / 10 + 200
-            else -> throw IllegalArgumentException("frequency must be between 0 and 1000")
+            else -> throw IllegalArgumentException("frequency must be between 10 and 1000")
         }
 
     /**
@@ -26,7 +26,7 @@ object PulseUtil
      */
     fun pulse(frequencies: List<Int>, strengths: List<Int>): List<String> =
         mutableListOf<String>().apply {
-            val size = strengths.size and frequencies.size
+            val size = strengths.size
             for (i in 0 until size step 4)
             {
                 add(buildString {
