@@ -61,10 +61,8 @@ class Conf : ConfigData
     data class CollapsedPulse(
         @ConfigEntry.Gui.CollapsibleObject
         var a: Pulse = Pulse(),
-
         @ConfigEntry.Gui.CollapsibleObject
         var b: Pulse = Pulse(),
-
         @ConfigEntry.Gui.CollapsibleObject
         var others: Others = Others()
     )
@@ -73,15 +71,10 @@ class Conf : ConfigData
     data class Pulse(
         @ConfigEntry.Gui.CollapsibleObject
         var frequency: Frequency = Frequency(),
-
-        var maximum: Double = 1.5,
-        var increaseRate: Double = 0.2,
-        var decreaseRate: Double = 0.04,
-        var compressor: Double = 0.5,
-        var multiplier: Double = 1.0,
-
         @ConfigEntry.Gui.CollapsibleObject
-        var onEvent: OnEvent = OnEvent()
+        var strength: Strength = Strength(),
+        @ConfigEntry.Gui.CollapsibleObject
+        var triggers: Triggers = Triggers()
     )
 
     @DeepCopy
@@ -91,12 +84,26 @@ class Conf : ConfigData
     )
 
     @DeepCopy
-    data class OnEvent(
+    data class Strength(
+        var maximum: Double = 1.5,
+        var increaseRate: Double = 0.2,
+        var decreaseRate: Double = 0.04,
+        //TODO Overlay wave
+    )
+
+    @DeepCopy
+    data class Triggers(
+        @ConfigEntry.Gui.CollapsibleObject
+        var onDamage: OnDamage = OnDamage(),
         var onDeath: Double = 0.5,
         var onTotemPop: Double = 0.3
     )
 
-    //TODO Overlay wave
+    @DeepCopy
+    data class OnDamage(
+        var compressor: Double = 0.5,
+        var multiplier: Double = 1.0,
+    )
 
     @DeepCopy
     data class Others(

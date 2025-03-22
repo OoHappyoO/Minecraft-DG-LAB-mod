@@ -78,19 +78,19 @@ class Outputter(
 
     fun onDamage(damage: Double)
     {
-        data.buffer += (damage / 20).pow(conf.compressor) * conf.multiplier
+        data.buffer += (damage / 20).pow(conf.triggers.onDamage.compressor) * conf.triggers.onDamage.multiplier
         isChanged = true
     }
 
     fun onDeath()
     {
-        data.buffer += conf.onEvent.onDeath
+        data.buffer += conf.triggers.onDeath
         isChanged = true
     }
 
     fun onTotemPop()
     {
-        data.buffer += conf.onEvent.onTotemPop
+        data.buffer += conf.triggers.onTotemPop
         isChanged = true
     }
 
@@ -114,22 +114,22 @@ class Outputter(
         var strength = strength
             set(value)
             {
-                field = value.coerceIn(0.0, conf.maximum)
+                field = value.coerceIn(0.0, conf.strength.maximum)
             }
 
         var buffer = buffer
             set(value)
             {
-                field = value.coerceIn(0.0, conf.maximum)
+                field = value.coerceIn(0.0, conf.strength.maximum)
             }
 
         fun iterate()
         {
-            val delta = buffer * conf.increaseRate - strength * conf.decreaseRate
+            val delta = buffer * conf.strength.increaseRate - strength * conf.strength.decreaseRate
             strength += delta
             if (delta > 0)
                 crest = strength.coerceIn(0.0, 1.0)
-            buffer *= (1.0 - conf.increaseRate)
+            buffer *= (1.0 - conf.strength.increaseRate)
         }
 
         val intStrength
